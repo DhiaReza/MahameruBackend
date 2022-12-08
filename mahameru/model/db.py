@@ -2,7 +2,9 @@ import click
 import pymongo
 from flask import current_app, g
 from flask.cli import with_appcontext
-
+from bson.son import SON
+from bson.json_util import dumps
+from bson.objectid import ObjectId
 
 def get_db():
     mongocon = current_app.config['MONGO_CON']
@@ -14,6 +16,13 @@ def get_collection(colname):
     if 'db' not in g:
         get_db()
     return g.db[colname]
+
+def get_chat_collection():
+    col = get_collection("chat")
+    pipeline = [ {"$lookup" : {"from" : "user", "localField" : "to_user", "foreignField" : "_id", "as": "chat_details" } }]
+    data = col.aggregate(pipeline)
+    current_app.logger.debug(data)
+    return data
 
 """
 Helper function to query all contact on system 

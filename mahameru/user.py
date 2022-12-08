@@ -4,9 +4,12 @@ from .model.db_user import *
 from bson.json_util import dumps
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
+from datetime import date
 
 bp = Blueprint('user', __name__,
                         template_folder='templates')
+
+today = date.today()
 
 '''
     Feedback : 
@@ -22,7 +25,7 @@ def add_user():
     user["nickname"] = form['nickname']
     user["notelp"] =form['notelp']
     user["pin"] = form['pin']
-    user["createdate"] = form['created_at'] # ini diganti jadi system yg ambil
+    user["createdate"] = form[today] # ini diganti jadi system yg ambil
     user["contactid"] = form['contact_id']
 
     if request.method == "POST" and form['name']:

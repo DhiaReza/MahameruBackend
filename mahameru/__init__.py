@@ -1,8 +1,9 @@
 import os
 from flask import Flask
-from . import db
+from bson.json_util import dumps
+from .model import db
 from . import user
-# file ini udah bener
+
 
 def create_app(test_config=None):
     app = Flask(__name__)
@@ -22,5 +23,12 @@ def create_app(test_config=None):
     def index():
         print("test")
         return "Mahameru Chat"
-
+    
+    @app.route('/chats')
+    def join_table():
+        joined = db.get_chat_collection()
+        hasil = dumps(joined)
+        app.logger.debug(hasil)
+        return hasil
+    
     return app
