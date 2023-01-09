@@ -4,11 +4,12 @@ from . import channel
 from . import user
 from . import chat
 from . import contact
+from flask_cors import CORS
 # file ini udah bener
 
 def create_app(test_config=None):
     app = Flask(__name__)
-    
+    CORS(app)
     app.config.from_pyfile('settings.cfg', silent=True)
     app.register_blueprint(channel.bp)
     app.register_blueprint(user.bp)
